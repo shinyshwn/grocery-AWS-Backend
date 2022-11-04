@@ -29,11 +29,11 @@ function query(conx, sql, params) {
 
 // Take in as input a payload.
 //
-// {  body: '{    "sku" : "ZH7SG35E",   "name" : "tomato", “description” : “ ohio potato”,   “price” : “2“， “max_quantity_per_shelf” : “50”}'
+// {  body: '{"sku" : "ZH7SG35E",   "aisle" : "2", “shelf” : “6”}'
 //
 // }
 //
-// ===>  { "success" : true }
+// ===>  { "statuscode" : 200}
 //
 //
 //
@@ -52,26 +52,26 @@ exports.lambdaHandler = async (event, context, callback) => {
 
     let actual_event = event.body;
     let info = JSON.parse(actual_event);
-    console.log("info:" + JSON.stringify(info)); //  info.sku , info.name, info.descriptions, info.price, info.max_quantity_per_shelf, info.shelf, info.aisle
-    var sqlinsert = "INSERT INTO items (sku, name, descriptions, price, max_quantity_per_shelf, shelf, aisle) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    console.log("info:" + JSON.stringify(info)); //  info.sku , info.shelf, info.aisle
+    var sqlinsert = "UPDATE items SET aisle = ?, shelf= ? WHERE sku = ?";
     
     try {
         
         new Promise((resolve, reject) => {
-                pool.query(sqlinsert, [info.sku , info.name, info.descriptions, info.price, info.max_quantity_per_shelf, info.shelf, info.aisle], (error, rows) => {
+                pool.query(sqlinsert, [info.aisle, info.shelf, info.sku], (error, rows) => {
                     if (error) { return reject(error); }
                     if (rows) {
                         return resolve(rows);
                     } else {
-                        return reject("unable to create item '" + info.name + "'");
+                        return reject("unable to assign item location'" + info.sku + "'");
                     }
                 });
             });
             
         // If either is NaN then there is an error
-        if (!info.name || !info.sku || !info.max_quantity_per_shelf) {
+        if (!info.shelf || !info.aisle) {
             response.statusCode = 400;
-            response.error = "SKU, name, and max number on shelf can not be null";
+            response.error = "shelf and aisle can not be null";
         } else {
             // otherwise SUCCESS!
             response.statusCode = 200;

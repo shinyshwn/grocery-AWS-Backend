@@ -18,7 +18,7 @@ Globals:
     
 
 Resources:
-  CreateItemFunction:
+  CreateItem:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
       CodeUri: create_item/
@@ -32,3 +32,20 @@ Resources:
           Properties:
             Path: /create-item
             Method: post
+            
+  AssignItemLocation:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: assign_item_loc/
+      Handler: app.lambdaHandler
+      Runtime: nodejs14.x
+      Architectures:
+        - x86_64
+      Events:
+        CreateItem:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /assign_item_loc
+            Method: post
+
+ 

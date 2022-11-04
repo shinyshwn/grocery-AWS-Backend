@@ -1,7 +1,7 @@
 {
-  "name": "create_item",
+  "name": "assign_item_loc",
   "version": "1.0.0",
-  "description": "create item in database",
+  "description": "assign item location",
   "main": "app.js",
   "repository": "TBA",
   "author": "SAM CLI",
