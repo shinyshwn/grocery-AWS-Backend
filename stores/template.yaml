@@ -27,13 +27,14 @@ Resources:
       Architectures:
         - x86_64
       Events:
-        CreateItem:
+        Create:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
-            Path: /create-item
+            Path: /create_item
             Method: post
             
-  AssignItemLocation:
+            
+  AssignLocation:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
       CodeUri: assign_item_loc/
@@ -42,10 +43,28 @@ Resources:
       Architectures:
         - x86_64
       Events:
-        CreateItem:
+        Update:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
             Path: /assign_item_loc
             Method: post
+            
+            
 
- 
+  CreateStore:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: create_store/
+      Handler: app.lambdaHandler
+      Runtime: nodejs14.x
+      Architectures:
+        - x86_64
+      Events:
+        Create:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /create_store
+            Method: post
+            
+            
+

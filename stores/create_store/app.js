@@ -6,6 +6,7 @@ const mysql = require('mysql');
 var config = require('./config.json');
 //create a mysql pool 
 var pool = mysql.createPool({
+    
     host: config.host,
     user: config.user,
     password: config.password,
@@ -30,12 +31,15 @@ function query(conx, sql, params) {
 
 // Take in as input a payload.
 //
-// {  body: '{    "sku" : "ZH7SG35E",   "name" : "tomato", “description” : “ ohio potato”,   “price” : “2“， “max_quantity_per_shelf” : “50”}'
+// {  body: '{    "id" : "123456",   "longitude" : "42.26259", “altitude” : “ -71.80229”}'
 //
 // }
 //
 // ===>  { "Created item successfully" }
 //
+//
+//
+
 exports.lambdaHandler = async (event, context, callback) => {
     context.callbackWaitsForEmptyEventLoop = false;
 
@@ -55,22 +59,22 @@ exports.lambdaHandler = async (event, context, callback) => {
 
     // get raw value or, if a string, then get from database if exists.
     let ComputeArgumentValue = (info) => {
-        if (info.name !== "" && info.sku !== "" && info.max_quantity_per_shelf !== 0) {
-            console.log(info.sku)
+        if (info.id !== "" ) {
+            console.log(info.id)
             return new Promise((resolve, reject) => {
-                pool.query("INSERT INTO items (sku, name, descriptions, price, max_quantity_per_shelf, shelf, aisle) VALUES (?, ?, ?, ?, ?, ?, ?);"
-                            , [info.sku , info.name, info.descriptions, info.price, info.max_quantity_per_shelf, info.shelf, info.aisle], (error, rows) => {
+                pool.query("INSERT INTO stores (id , longitude, latitude) VALUES (?, ?, ?);"
+                            , [info.id , info.longitude, info.latitude], (error, rows) => {
                     if (error) { return reject(error); }
                     if (rows) {
                         return resolve(1);
                     } else {
-                        return reject("unable to create '" + info.name + "'");
+                        return reject("unable to create '" + info.id + "'");
                     }
                 });
             });
         } else {
             // this is just the constant
-            return new Promise((reject) => { return reject("SKU, name, and max number on shelf can not be null"); });
+            return new Promise((reject) => { return reject("Store id can not be empty"); });
         }
     }
     
