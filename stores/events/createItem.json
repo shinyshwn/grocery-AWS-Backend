@@ -1,3 +1,3 @@
 {
-    "body" : "{ \"sku\" : \"\", \"name\" : \"potato\" , \"descriptions\" : \"\" , \"price\" : \"\" , \"max_quantity_per_shelf\" : \"50\", \"shelf\" : \"\" , \"aisle\" : \"\"}"
+    "body" : "{ \"sku\" : \"34\", \"name\" : \"potato\" , \"descriptions\" : \"\" , \"price\" : \"\" , \"max_quantity_per_shelf\" : \"50\", \"shelf\" : \"\" , \"aisle\" : \"\"}"
 }

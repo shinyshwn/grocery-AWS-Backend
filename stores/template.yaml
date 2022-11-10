@@ -15,7 +15,7 @@ Globals:
       AllowHeaders: "'content-type'"
       AllowOrigin: "'*'"
       # AllowCredentials: true  Uncomment only if you choose a specific origin instead of the * wildcard.
-    
+
 
 Resources:
   CreateItem:
@@ -33,6 +33,21 @@ Resources:
             Path: /create_item
             Method: post
             
+  ProcessShipment:
+      Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+      Properties:
+        CodeUri: process_shipment/
+        Handler: app.lambdaHandler
+        Runtime: nodejs14.x
+        Architectures:
+          - x86_64
+        Events:
+         Update:
+            Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+            Properties:
+              Path: /process_shipment
+              Method: post
+
             
   AssignLocation:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction

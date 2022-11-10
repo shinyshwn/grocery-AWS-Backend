@@ -31,11 +31,13 @@ function query(conx, sql, params) {
 
 // Take in as input a payload.
 //
-// {
-//   "body" : "{ \"sku\" : \"ZH7Sf35E\", \"shelf\" : \"5\" , \"aisle\" : \"100\"}"
+// { "shipment": [
+//         "{ \"sku\" : \"testn10\", \"quantity\" : \"52\" , \"aisle\" : \"10\"}",
+//         "{ \"sku\" : \"testn9\", \"shelf\" : \"52\" , \"aisle\" : \"10\"}",
+//     ]
 // }
 //
-// ===>  { "Assigned location successfully" }
+// ===>  { "update successfully" }
 //
 //
 
@@ -53,32 +55,33 @@ exports.lambdaHandler = async (event, context, callback) => {
 
 
     let actual_event = event.body;
-    let info = JSON.parse(actual_event);
-    console.log("info:" + JSON.stringify(info)); //  info.arg1 and info.arg2
-
-    // get raw value or, if a string, then get from database if exists.
-    let ComputeArgumentValue = (info) => {
-        if (info.sku !== "") {
-            console.log(info.sku)
+    console.log(JSON.stringify(actual_event))
+    for (let i in actual_event) {
+        // let info = JSON.parse(shipment);
+        // console.log("info:" + JSON.stringify(info));
+        console.log(JSON.stringify(actual_event[i]))
+        let info = JSON.parse(actual_event[i]);
+        let ComputeArgumentValue = (info) => {
+        if (info.sku !== "" || info.store_id !== "" ) {
+            console.log(info.sku); 
             return new Promise((resolve, reject) => {
-                pool.query("UPDATE items SET shelf = ?, aisle = ? WHERE sku = ?;"
-                            , [info.shelf, info.aisle, info.sku], (error, rows) => {
+                pool.query("UPDATE inventory SET quantity = quantity + ? WHERE sku = ? AND store_id = ?;"
+                            , [info.quantity, info.sku, info.store_id], (error, rows) => {
                     if (error) { console.log("return 2" ); return reject(error); }
-                    if (rows.affectedRows != 0) {
+                    if (rows) {
                         console.log(JSON.stringify(rows));
                         return resolve(1);
                     } else {
                         console.log(JSON.stringify(rows));
-                        return reject("unable to update location for '" + info.sku + "'");
+                        return reject("unable to generate inventory report for '" + info.store_id + "'");
                     }
                 });
             });
         } else {
             // this is just the constant
-            return new Promise((reject) => { return reject("SKU can not be empty"); });
+            return new Promise((reject) => { return reject("store ID and sku can not be empty"); });
         }
     }
-    
     try {
         
         // 1. Query RDS for the first constant value
@@ -96,7 +99,7 @@ exports.lambdaHandler = async (event, context, callback) => {
             // otherwise SUCCESS!
             response.statusCode = 200;
            
-            response.result = "Update item location successfully";
+            response.result = "process shipment successfully";
         }
     } catch (error) {
         console.log("ERROR: " + error);
@@ -105,5 +108,9 @@ exports.lambdaHandler = async (event, context, callback) => {
     }
     
     // full response is the final thing to send back
+    
+    }
     return response;
+    // get raw value or, if a string, then get from database if exists.
+ 
 }

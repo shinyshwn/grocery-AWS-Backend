@@ -32,10 +32,11 @@ function query(conx, sql, params) {
 // Take in as input a payload.
 //
 // {
-//   "body" : "{ \"sku\" : \"ZH7Sf35E\", \"shelf\" : \"5\" , \"aisle\" : \"100\"}"
+//   "body" : "{ \"store_id\" : \"1234\"}"
 // }
 //
-// ===>  { "Assigned location successfully" }
+// ===>  { [\"sku\" : \"ZH7Sf35E\", \"stock\" : \10\, \"overstock\" : \10\],
+//         [\"sku\" : \"AS592TB4\", \"stock\" : \10\, \"overstock\" : \10\] }
 //
 //
 
@@ -58,24 +59,24 @@ exports.lambdaHandler = async (event, context, callback) => {
 
     // get raw value or, if a string, then get from database if exists.
     let ComputeArgumentValue = (info) => {
-        if (info.sku !== "") {
-            console.log(info.sku)
+        if (info.store_id !== "") {
+            console.log(info.store_id); 
             return new Promise((resolve, reject) => {
-                pool.query("UPDATE items SET shelf = ?, aisle = ? WHERE sku = ?;"
-                            , [info.shelf, info.aisle, info.sku], (error, rows) => {
+                pool.query("SELECT sku, quantity, overstock FROM inventory WHERE store_id = ?;"
+                            , [info.store_id], (error, rows) => {
                     if (error) { console.log("return 2" ); return reject(error); }
-                    if (rows.affectedRows != 0) {
+                    if (rows) {
                         console.log(JSON.stringify(rows));
                         return resolve(1);
                     } else {
                         console.log(JSON.stringify(rows));
-                        return reject("unable to update location for '" + info.sku + "'");
+                        return reject("unable to generate inventory report for '" + info.store_id + "'");
                     }
                 });
             });
         } else {
             // this is just the constant
-            return new Promise((reject) => { return reject("SKU can not be empty"); });
+            return new Promise((reject) => { return reject("store ID can not be empty"); });
         }
     }
     
