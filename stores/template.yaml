@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: >
@@ -96,3 +97,5 @@ Resources:
             Path: /generate_inventory
             Method: post       
 
+=======
+>>>>>>> 7559097 (process shipment lambda)
