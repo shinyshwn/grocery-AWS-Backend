@@ -58,7 +58,7 @@ exports.lambdaHandler = async (event, context, callback) => {
 
     // get raw value or, if a string, then get from database if exists.
     let ComputeArgumentValue = (info) => {
-        if (info.id !== "") {
+        if (info.store_id != "" && info.store_id != null) {
             console.log(info.store_id)
             return new Promise((resolve, reject) => {
                 pool.query("SELECT sku, quantity, overstock, unit_price FROM inventory where store_id = ?;"
@@ -84,7 +84,7 @@ exports.lambdaHandler = async (event, context, callback) => {
             });
         }
         else {
-             return new Promise((reject) => { return reject("Store ID can not be empty"); });
+             return new Promise((reject) => { return reject(1); });
         }
     }
     // let ComputeArgumentValue = (info) => {
