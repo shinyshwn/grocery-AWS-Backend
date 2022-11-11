@@ -61,7 +61,7 @@ exports.lambdaHandler = async (event, context, callback) => {
         if (info.id !== "") {
             console.log(info.store_id)
             return new Promise((resolve, reject) => {
-                pool.query("SELECT sku, quantity, overstock FROM inventory where store_id = ?;"
+                pool.query("SELECT sku, quantity, overstock, unit_price FROM inventory where store_id = ?;"
                             , [info.store_id], (error, rows) => {
                                 if (error) {
                                     console.log("error"); 
@@ -69,8 +69,12 @@ exports.lambdaHandler = async (event, context, callback) => {
                                     return reject(1)
                                 }
                                 if(rows){
+                                    for(let row in rows){
+                                        let total_value = (rows[row].quantity + rows[row].overstock) * rows[row].unit_price; 
+                                        console.log(total_value); 
+                                        rows[row].total_value = total_value; 
+                                    }
                                     console.log("successful");
-                                    console.log()
                                     return resolve(rows)
                                 }
                                 else{
