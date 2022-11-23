@@ -1,0 +1,21 @@
+{
+  "name": "find_item_in_store",
+  "version": "1.0.0",
+  "description": "Find item in stores",
+  "main": "app.js",
+  "repository": "TBA",
+  "author": "SAM CLI",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "mysql": "^2.18.1",
+    "haversine": "^1.1.1"
+  },
+  "scripts": {
+    "test": "mocha tests/unit/"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^9.1.4"
+  }
+}

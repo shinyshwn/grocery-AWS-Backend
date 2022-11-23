@@ -36,7 +36,7 @@ Resources:
   ProcessShipment:
       Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
       Properties:
-        CodeUri: process_shipment/
+        CodeUri: processShipment/
         Handler: app.lambdaHandler
         Runtime: nodejs14.x
         Architectures:
@@ -45,7 +45,7 @@ Resources:
          Update:
             Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
             Properties:
-              Path: /process_shipment
+              Path: /processShipment
               Method: post
 
             
@@ -111,3 +111,32 @@ Resources:
             Path: /list_stores
             Method: post      
 
+  ItemAisleShelf:
+      Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+      Properties:
+        CodeUri: item_AisleShelf/
+        Handler: app.lambdaHandler
+        Runtime: nodejs14.x
+        Architectures:
+          - x86_64
+        Events:
+          Grab:
+            Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+            Properties:
+              Path: /item_AisleShelf
+              Method: post
+              
+  FindItemInStore:
+      Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+      Properties:
+        CodeUri: find_item_in_store/
+        Handler: app.lambdaHandler
+        Runtime: nodejs14.x
+        Architectures:
+          - x86_64
+        Events:
+          Grab:
+            Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+            Properties:
+              Path: /find_item_in_store
+              Method: post     
