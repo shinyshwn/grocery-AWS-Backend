@@ -105,23 +105,6 @@ exports.lambdaHandler = async (event, context, callback) => {
         });
     }
     
-    // let findDistance = (user_lat, user_lng, store_lat, store_lng) => {
-        
-    //     //npm install --save haversine-distance
-    //     var haversine = require("haversine-distance");
-    //     // var haversine = require("haversine-distance");
-
-    //     //User location in haversine calculation
-    //     var user_location = { lat: user_lat, lng: user_lng }
-        
-    //     //Store location in haversine calculation
-    //     var store_location = { lat: store_lat, lng: store_lng }
-        
-    //     var distance = haversine(user_location, store_location); //Results in meters (default)
-        
-    //     return distance;
-        
-    // }
     let findDistance = (user_lat, user_lng, store_lat, store_lng) => {
         const haversine = require('haversine');
     
@@ -160,13 +143,12 @@ exports.lambdaHandler = async (event, context, callback) => {
             console.log("No sku, name, or description entered.");
         }
         
-        var distances = [];
         console.log('xxxxxx');
         console.log(JSON.stringify(store_results));
         console.log(typeof store_results);
         
         store_results.forEach((store) =>{
-            // JSON.parse(JSON.stringify(store));
+            
             console.log(store.id);
             store.distance = findDistance(info.latitude, info.longitude, store.latitude, store.longitude);
             console.log(store.distance);
