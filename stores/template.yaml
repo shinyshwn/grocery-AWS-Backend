@@ -139,4 +139,19 @@ Resources:
             Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
             Properties:
               Path: /find_item_in_store
-              Method: post     
+              Method: post  
+              
+  CorporateListStores:
+      Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+      Properties:
+        CodeUri: corp_list_stores/
+        Handler: app.lambdaHandler
+        Runtime: nodejs14.x
+        Architectures:
+          - x86_64
+        Events:
+          Grab:
+            Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+            Properties:
+              Path: /corp_list_stores
+              Method: post   
