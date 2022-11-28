@@ -1,14 +1,15 @@
 {
-  "name": "create_item",
+  "name": "cus_list_stores",
   "version": "1.0.0",
-  "description": "create item in database",
+  "description": "list stores based on customer location",
   "main": "app.js",
   "repository": "TBA",
   "author": "SAM CLI",
   "license": "MIT",
   "dependencies": {
-    "axios" : "^0.21.1",
-    "mysql": "^2.18.1"
+    "axios": "^0.21.1",
+    "mysql": "^2.18.1",
+    "haversine": "^1.1.1"
   },
   "scripts": {
     "test": "mocha tests/unit/"
