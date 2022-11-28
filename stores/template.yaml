@@ -99,7 +99,7 @@ Resources:
   ListStores:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
-      CodeUri: list_stores/
+      CodeUri: cus_list_stores/
       Handler: app.lambdaHandler
       Runtime: nodejs14.x
       Architectures:
@@ -108,7 +108,7 @@ Resources:
         Grab:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
-            Path: /list_stores
+            Path: /cus_list_stores
             Method: post      
 
   ItemAisleShelf:

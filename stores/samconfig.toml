@@ -2,9 +2,9 @@ version = 0.1
 [default]
 [default.deploy]
 [default.deploy.parameters]
-stack_name = "stores"
+stack_name = "grocery"
 s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-1t9qholyylelq"
-s3_prefix = "stores"
+s3_prefix = "grocery"
 region = "us-east-1"
 confirm_changeset = true
 capabilities = "CAPABILITY_IAM"

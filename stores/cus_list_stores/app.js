@@ -2,6 +2,7 @@
 // const url = 'http://checkip.amazonaws.com/';
 let response;
 const mysql = require('mysql');
+//const haversine = require('haversine');
 
 var config = require('./config.json');
 //create a mysql pool 
@@ -41,6 +42,7 @@ function query(conx, sql, params) {
 //
 exports.lambdaHandler = async (event, context, callback) => {
     context.callbackWaitsForEmptyEventLoop = false;
+    var store_results = [];
 
    // ready to go for CORS. To make this a completed HTTP response, you only need to add a statusCode and a body.
     let response = {
@@ -50,31 +52,55 @@ exports.lambdaHandler = async (event, context, callback) => {
             "Access-Control-Allow-Methods": "POST" // Allow POST request
         }
     }; // response
+    
+    //get gps location from customer
+    //grab location data from the database
+    //calculate the distance, with store id
+    //add the distance column to the table
+    //return the stores ranked by distance
 
 
     let actual_event = event.body;
     let info = JSON.parse(actual_event);
-    console.log("info:" + JSON.stringify(info)); //  info.arg1 and info.arg2
+    // console.log(info.longitude);
+    // console.log(info.latitude);
+    // console.log("info:" + JSON.stringify(info)); 
 
     // get raw value or, if a string, then get from database if exists.
     let ComputeArgumentValue = (info) => {
-        if (info.name !== "" && info.sku !== "" && info.max_quantity_per_shelf !== 0) {
-            console.log(info.sku)
+        if (!isNaN(info.longitude) && !isNaN(info.latitude)) {
+            console.log(info.longitude)
             return new Promise((resolve, reject) => {
-                pool.query("INSERT INTO items (sku, name, descriptions, price, max_quantity_per_shelf, shelf, aisle) VALUES (?, ?, ?, ?, ?, ?, ?);"
-                            , [info.sku , info.name, info.descriptions, info.price, info.max_quantity_per_shelf, info.shelf, info.aisle], (error, rows) => {
+                pool.query("SELECT * FROM stores;" , (error, rows) => {
                     if (error) { return reject(error); }
                     if (rows) {
-                        return resolve(1);
+                        store_results = rows;
+                        return resolve(true);
                     } else {
-                        return reject("unable to create '" + info.name + "'");
+                        return reject("cannot get stores from database '");
                     }
                 });
             });
         } else {
             // this is just the constant
-            return new Promise((reject) => { return reject("SKU, name, and max number on shelf can not be null"); });
+            return new Promise((reject) => { return reject("longtitude and latitude can only be numbers"); });
         }
+    }
+    
+    let findDistance = (user_lat, user_lng, store_lat, store_lng) => {
+        const haversine = require('haversine'); 
+    
+        const start = {
+          latitude: user_lat,
+          longitude: user_lng
+        }
+        
+        const end = {
+          latitude: store_lat,
+          longitude: store_lng
+        }
+        
+        return haversine(start, end, {unit: 'mile'});
     }
     
     try {
@@ -83,20 +109,38 @@ exports.lambdaHandler = async (event, context, callback) => {
         // 2. Query RDS for the second constant value
         // ----> These have to be done asynchronously in series, and you wait for earlier 
         // ----> request to complete before beginning the next one
-        let arg1_value = await ComputeArgumentValue(info);
+        let selectStoreResult = await ComputeArgumentValue(info);
+        console.log(selectStoreResult);
+        // 
+        if (selectStoreResult == true) {
+            //console.log(JSON.stringify(store_results));
+            store_results.forEach((store) =>{
+            // JSON.parse(JSON.stringify(store));
+            //console.log(store.id);
+            store.distance = findDistance(info.latitude, info.longitude, store.latitude, store.longitude);
+            delete store['latitude'];
+            delete store['longitude'];
+            //console.log(store.distance);
+            });
+            
+            
+            store_results.sort((a, b) => {
+                return a.distance - b.distance;
+            });
         
-        // If either is NaN then there is an error
-        if (arg1_value) {
-            console.log("arg" + arg1_value.reject);
-            response.statusCode = 400;
-            response.error = JSON.stringify(arg1_value);
-        } else {
-            // otherwise SUCCESS!
-            console.log(JSON.stringify(arg1_value));
+            //console.log(JSON.stringify(store_results));
+            
             response.statusCode = 200;
+            response.result = store_results;
+
+        } else {
+
+            response.statusCode = 400;
            
-            response.result = "List stores successfully";
+            response.result = JSON.stringify(selectStoreResult);
         }
+        
+        
     } catch (error) {
         console.log("ERROR: " + error);
         response.statusCode = 400;
