@@ -97,7 +97,6 @@ exports.lambdaHandler = async (event, context, callback) => {
                 let deletedCount = JSON.parse(JSON.stringify(rows)).affectedRows; 
                 console.log("row count is : "+deletedCount+" and is of type: "+deletedCount.typeof)
                 if ((rows) &&  (deletedCount === 1)) {
-                    console.log("Deletion 1: affected rows of ps"+ JSON.parse(JSON.stringify(rows)).affectedRows)
                     console.log("Deletion check 1: "+ JSON.stringify(rows))
                     return resolve(store_id); // TRUE if was able to add
                 }
@@ -147,7 +146,7 @@ exports.lambdaHandler = async (event, context, callback) => {
             if (inventoryExists) {
                  
                 const deletedItems = await DeleteItemsOfStore(store_id); 
-                if(!deletedItems) {
+                if(deletedItems) {
                     response.statusCode = 400; 
                     response.error = "Count not delete items from store"; 
                 }
@@ -155,7 +154,11 @@ exports.lambdaHandler = async (event, context, callback) => {
             
             const deletedStore = await DeleteStore(store_id); 
             console.log("E4")
-            if(deletedStore == -1) {
+            if((deletedStore)) { 
+                response = JSON.parse(deletedStore); 
+                response.statusCode = 200; 
+                console.log("deleted store: "+deletedStore)
+            } else {
                 response.statusCode = 400; 
                 response.error = "Could not delete the store"; 
             }
