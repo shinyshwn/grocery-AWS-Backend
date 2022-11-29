@@ -61,7 +61,7 @@ exports.lambdaHandler = async (event, context, callback) => {
         if (info.store_id != "" && info.store_id != null) {
             console.log(info.store_id)
             return new Promise((resolve, reject) => {
-                pool.query("SELECT sku, overstock FROM inventory where store_id = ?;"
+                pool.query("SELECT sku, overstock FROM inventory where store_id=? AND overstock<>0;"
                             , [info.store_id], (error, rows) => {
                                 if (rows.length === 0){
                                     console.log("store does not exist")
