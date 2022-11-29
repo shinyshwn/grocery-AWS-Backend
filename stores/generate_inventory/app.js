@@ -51,82 +51,106 @@ exports.lambdaHandler = async (event, context, callback) => {
         }
     }; // response
 
-
+    var inventory_result = [];
+    var item_prices = [];
+    var store_total_value = 0; 
     let actual_event = event.body;
     let info = JSON.parse(actual_event);
     console.log("info:" + JSON.stringify(info)); //  info.arg1 and info.arg2
 
     // get raw value or, if a string, then get from database if exists.
-    let ComputeArgumentValue = (info) => {
+    let getInventory = (info) => {
         if (info.store_id != "" && info.store_id != null) {
             console.log(info.store_id)
             return new Promise((resolve, reject) => {
-                pool.query("SELECT sku, quantity, overstock, unit_price FROM inventory where store_id = ?;"
-                            , [info.store_id], (error, rows) => {
+                pool.query("SELECT sku, quantity FROM inventory WHERE store_id = ?;" , [info.store_id], (error, rows) => {
                                 if (error) {
                                     console.log("error"); 
                                     // return reject(error); 
-                                    return reject(1)
+                                    return reject(error)
                                 }
                                 if(rows){
-                                    for(let row in rows){
-                                        let total_value = (rows[row].quantity + rows[row].overstock) * rows[row].unit_price; 
-                                        console.log(total_value); 
-                                        rows[row].total_value = total_value; 
+                                    if(rows.length < 1){
+                                        return reject(" No inventory for the store ")
                                     }
-                                    console.log("successful");
-                                    return resolve(rows)
+                                    inventory_result = rows; 
+                                    //console.log(JSON.stringify(inventory_result));
+                                    //console.log(rows.length);
+                                    return resolve(true)
                                 }
                                 else{
-                                    return reject("unable to generate inventory report for store " + info.store_id);
+                                    return reject("unable to get inventory from the table " + info.store_id);
                                 }
                             })
             });
         }
         else {
-             return new Promise((reject) => { return reject(1); });
+             return new Promise((reject) => { return reject("store id can not be empty"); });
         }
     }
-    // let ComputeArgumentValue = (info) => {
-    //     if (info.sku !== "") {
-    //         console.log(info.sku)
-    //         return new Promise((resolve, reject) => {
-    //             pool.query("UPDATE items SET shelf = ?, aisle = ? WHERE sku = ?;"
-    //                         , [info.shelf, info.aisle, info.sku], (error, rows) => {
-    //                 if (error) { console.log("return 2" ); return reject(error); }
-    //                 if (rows) {
-    //                     console.log("arg return 1");
-    //                     return resolve(1);
-    //                 } else {
-    //                     return reject("unable to update location for '" + info.sku + "'");
-    //                 }
-    //             });
-    //         });
-    //     } else {
-    //         // this is just the constant
-    //         return new Promise((reject) => { return reject("SKU can not be empty"); });
-    //     }
-    // }
     
+    let getPrice = (info) => {
+        if (info.store_id != "" && info.store_id != null) {
+            return new Promise((resolve, reject) => {
+                pool.query("SELECT sku, price FROM items WHERE sku IN (SELECT sku FROM inventory WHERE store_id=?);" , [info.store_id], (error, rows) => {
+                                if (error) {
+                                    console.log("error"); 
+                                    // return reject(error); 
+                                    return reject(error)
+                                }
+                                if(rows){
+                                    item_prices = rows; 
+                                    //console.log(JSON.stringify(item_prices));
+                                    return resolve(true)
+                                }
+                                else{
+                                    return reject("unable to get prices from the table ");
+                                }
+                            })
+            });
+        }
+        else {
+             return new Promise((reject) => { return reject("get prices: store id can not be empty"); });
+        }
+    }
+    
+
     try {
         
         // 1. Query RDS for the first constant value
         // 2. Query RDS for the second constant value
         // ----> These have to be done asynchronously in series, and you wait for earlier 
         // ----> request to complete before beginning the next one
-        let arg1_value = await ComputeArgumentValue(info);
+        let getInven = await getInventory(info);
+        let getP = await getPrice(info);
+
         
         // If either is NaN then there is an error
-        if (arg1_value === 1) {
-            console.log("error: " + arg1_value.reject);
-            response.statusCode = 400;
-            response.error = JSON.stringify(arg1_value);
-        } else {
-            // otherwise SUCCESS!
+        if (getInven == true) {
+            
+            let arr3 = inventory_result.map((item, i) => Object.assign({}, item, item_prices[i]));
+            //console.log(arr3); 
+            arr3.forEach((entry) =>{
+            
+                entry.item_total_value = entry.price * entry.quantity;
+                store_total_value = store_total_value + entry.item_total_value;
+                //console.log(entry);
+            
+            });
+            //console.log(store_total_value);
+            let store_inventroy_total_value = "store_total_inventroy_value: " + store_total_value; 
+            arr3.push(store_inventroy_total_value); 
+            //console.log(arr3);
             response.statusCode = 200;
             // response.result = JSON.stringify(arg1_value);
            
-            response.result = arg1_value;
+            response.result = arr3;
+            
+        } else {
+            // otherwise SUCCESS!
+            console.log("error: " + getInven.reject);
+            response.statusCode = 400;
+            response.error = JSON.stringify(getInven);
         }
     } catch (error) {
         console.log("ERROR: " + error);
