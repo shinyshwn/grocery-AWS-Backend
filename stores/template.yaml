@@ -170,3 +170,19 @@ Resources:
             Properties:
               Path: /generate_overstock
               Method: post
+              
+  CorpInventoryReport:
+      Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+      Properties:
+        CodeUri: corp_generate_inventory/
+        Handler: app.lambdaHandler
+        Runtime: nodejs14.x
+        Architectures:
+          - x86_64
+        Events:
+          Grab:
+            Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+            Properties:
+              Path: /corp_generate_inventory
+              Method: post
+
