@@ -60,7 +60,7 @@ exports.lambdaHandler = async (event, context, callback) => {
 // get table of items by aisle and shelf and store
 
     
-    // method to check if the store has that sku in inventory
+    // method to check if the store has any inventory
     let CheckExistence = (store_id) => {
         return new Promise((resolve, reject) => {
             pool.query("SELECT * FROM inventory WHERE store_id=?", [store_id], (error, rows) => {
@@ -91,14 +91,11 @@ exports.lambdaHandler = async (event, context, callback) => {
                 }
                 else {
                     console.log("Get item list check 2: "+ JSON.stringify(rows))
-                    return resolve(false); // REJECT if couldn't add  WAIT TO CHECK
+                    return resolve(''); // REJECT if couldn't add  WAIT TO CHECK
                 }
             });
         });
     }
-    
-        
-    
         try {
             console.log("inputted json body: "+ info)
             let store_id = info.store_id; 
@@ -112,19 +109,16 @@ exports.lambdaHandler = async (event, context, callback) => {
             if(exists) {
                 
                 const itemList = await GetItemList(store_id, shelf, aisle); 
-                console.log("E3::: item List is : "+itemList)
-                if (itemList != '') {
-                    console.log("item list has been obtained: "+itemList)
-                    console.log("item list parsed: "+JSON.parse(itemList))
-                }
-                else {
+                console.log("E3 - Item List is : "+itemList)
+                
+                if (itemList == '') {
                     console.log("No item list ")
-                    response.statusCode = 401;
-                    response.error = "Couldn't get store's items : "+ store_id;
+                    response.statusCode = 400;
+                    response.error = "Could not find items on given shelf/aisle at this store";
                 }
             }
             else {
-                response.error = "Store has no inventory"; 
+                response.error = "Store not found"; 
                 response.statusCode = 400; 
             }
         }
