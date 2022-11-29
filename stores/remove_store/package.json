@@ -1,13 +1,13 @@
 {
-  "name": "generate_overstock",
+  "name": "remove_store",
   "version": "1.0.0",
-  "description": "generate overstock",
+  "description": "Remove a store",
   "main": "app.js",
   "repository": "TBA",
   "author": "SAM CLI",
   "license": "MIT",
   "dependencies": {
-    "axios" : "^0.21.1",
+    "axios": "^0.21.1",
     "mysql": "^2.18.1"
   },
   "scripts": {
