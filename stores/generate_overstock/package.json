@@ -1,7 +1,7 @@
 {
-  "name": "assign_item_loc",
+  "name": "generate_overstock",
   "version": "1.0.0",
-  "description": "assign item location",
+  "description": "generate overstock",
   "main": "app.js",
   "repository": "TBA",
   "author": "SAM CLI",
