@@ -58,8 +58,6 @@ exports.lambdaHandler = async (event, context, callback) => {
     let info = JSON.parse(event.body);
 
 // get table of items by aisle and shelf and store
-
-    
     // method to check if the store has any inventory
     let CheckExistence = (store_id) => {
         return new Promise((resolve, reject) => {
@@ -116,6 +114,10 @@ exports.lambdaHandler = async (event, context, callback) => {
                     response.statusCode = 400;
                     response.error = "Could not find items on given shelf/aisle at this store";
                 }
+                else {
+                    response = itemList; 
+                    console.log("Set item list to table for response")
+                }
             }
             else {
                 response.error = "Store not found"; 
@@ -129,6 +131,7 @@ exports.lambdaHandler = async (event, context, callback) => {
         }
     
     console.log("RESPONSE FINAL : "+response)
+    console.log("RESPONSE FINAL stingified: "+JSON.stringify(response))
     
 return response;
 };
