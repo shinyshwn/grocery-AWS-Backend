@@ -99,7 +99,7 @@ exports.lambdaHandler = async (event, context, callback) => {
                 if ((rows) &&  (deletedCount === 1)) {
                     console.log("Deletion 1: affected rows of ps"+ JSON.parse(JSON.stringify(rows)).affectedRows)
                     console.log("Deletion check 1: "+ JSON.stringify(rows))
-                    return resolve(true); // TRUE if was able to add
+                    return resolve(store_id); // TRUE if was able to add
                 }
                 else {
                     console.log("Deletion check 2: "+ JSON.stringify(rows))
@@ -129,12 +129,7 @@ exports.lambdaHandler = async (event, context, callback) => {
         });
     }
 
-    // console.log("deleting for store whose info is: "+info)
-    // console.log("and the actual json body is: "+actual_body)
-    // console.log("actual body STORE ID : "+actual_body.store_id)
     let store_id = info.store_id; 
-    // console.log("and store id is: "+ store_id)
-    // console.log("and store id parsed is: "+ JSON.parse(store_id))
 
     try {
 
@@ -150,16 +145,17 @@ exports.lambdaHandler = async (event, context, callback) => {
 
             console.log("Enter inventory Exists")
             if (inventoryExists) {
-                // get current tables stock values 
+                 
                 const deletedItems = await DeleteItemsOfStore(store_id); 
                 if(!deletedItems) {
+                    response.statusCode = 400; 
                     response.error = "Count not delete items from store"; 
                 }
             }
             
             const deletedStore = await DeleteStore(store_id); 
             console.log("E4")
-            if(!deletedStore) {
+            if(deletedStore == -1) {
                 response.statusCode = 400; 
                 response.error = "Could not delete the store"; 
             }
@@ -177,6 +173,8 @@ exports.lambdaHandler = async (event, context, callback) => {
     }
     
     console.log("RESPONSE FINAL : "+response)
+    console.log("RESPONSE FINAL stringified : "+JSON.stringify(response))
+    
     
 return response;
 };
