@@ -1,1 +1,1 @@
-{ "body" : "{\"shipments\": [{\"store_id\" : \"11\", \"sku\" : \"1233333\", \"quantity\" : \"10\" } , { \"store_id\" : \"31\", \"sku\" : \"22\", \"quantity\" : \"55\" }, { \"store_id\" : \"1\", \"sku\" : \"111\", \"quantity\" : \"3\" }]}" }
+{ "body" : "{\"shipments\": [{\"store_id\" : \"11\", \"sku\" : \"1233333\", \"quantity\" : \"10\" } , { \"store_id\" : \"31\", \"sku\" : \"22\", \"quantity\" : \"55\" }, { \"store_id\" : \"509\", \"sku\" : \"22\", \"quantity\" : \"6\" }]}" }
