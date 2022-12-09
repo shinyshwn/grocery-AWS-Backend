@@ -151,6 +151,7 @@ exports.lambdaHandler = async (event, context, callback) => {
 
     // math and temp storage variables 
     let maxShelfQuantity = 0;
+    response.result = "Success! The folowing shelves were filled: ";
     let store_id = info.store_id; 
     console.log("FROM JSON got store_id: "+ store_id)
     
@@ -200,6 +201,7 @@ exports.lambdaHandler = async (event, context, callback) => {
                     }
                     else {
                         response.statusCode = 200; 
+                        response.result = response.result + ",  sku: "+sku+" filled to "+quantity; 
                     }
                 }
                 else {
@@ -226,6 +228,7 @@ exports.lambdaHandler = async (event, context, callback) => {
     }
   
     console.log("RESPONSE FINAL : "+ JSON.stringify(response.statusCode))
+    console.log("Response result: "+ JSON.stringify(response.result))
     
 return response;
 };
