@@ -1,13 +1,13 @@
 {
-  "name": "generate_inventory",
+  "name": "fill_shelves",
   "version": "1.0.0",
-  "description": "assign item location",
+  "description": "Fill the shelves of the store with items in overstock",
   "main": "app.js",
-  "repository": "TBA",
+  "repository": "tbd",
   "author": "SAM CLI",
   "license": "MIT",
   "dependencies": {
-    "axios" : "^0.21.1",
+    "axios": "^0.21.1",
     "mysql": "^2.18.1"
   },
   "scripts": {

@@ -1,13 +1,13 @@
 {
-  "name": "generate_inventory",
+  "name": "aisle_shelf_item",
   "version": "1.0.0",
-  "description": "assign item location",
+  "description": "Get list of item skus in aisle/shelf",
   "main": "app.js",
-  "repository": "TBA",
+  "repository": "tbd",
   "author": "SAM CLI",
   "license": "MIT",
   "dependencies": {
-    "axios" : "^0.21.1",
+    "axios": "^0.21.1",
     "mysql": "^2.18.1"
   },
   "scripts": {

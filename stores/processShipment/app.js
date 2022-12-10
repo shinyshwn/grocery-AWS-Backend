@@ -100,7 +100,9 @@ exports.lambdaHandler = async (event, context, callback) => {
         return new Promise((resolve, reject) => {
             pool.query("INSERT INTO inventory (store_id,sku,quantity,overstock) VALUES(?,?,?,?)", [store_id, sku, quantity, overstock], (error, rows) => {
                 if (error) { return reject(error); }
-                if ((rows) && (rows.length == 1)) {
+                // get information on the query results from rows into data 
+                let data = JSON.parse(JSON.stringify(rows));
+                if ((rows) && (data.affectedRows == 1)) {
                     console.log("Insertion check 1: "+ JSON.stringify(rows))
                     return resolve(true); // TRUE if was able to add
                 }
@@ -118,13 +120,9 @@ exports.lambdaHandler = async (event, context, callback) => {
         return new Promise((resolve, reject) => {
             pool.query("SELECT quantity, overstock FROM inventory WHERE store_id=? AND sku=?", [store_id, sku], (error, data) => {
                 if (error) { return reject(error); }
-        // CHANGE UPDATE IF STATEMENT ?
                 if ((data) && (data.length == 1)) {
-                    // console.log("Get current Inventory Data table"+data+" of type: "+ data.typeof) 
                     
                     let sdata = JSON.stringify(data); 
-                    // console.log("Get current Inventory sdata "+ sdata +" of type: " + sdata.typeof)
-                    
                     let psdata = JSON.parse(sdata.slice(1, -1)); 
                     console.log("Get current Inventory: "+psdata+" of type : "+psdata.typeof)
                     
@@ -148,10 +146,12 @@ exports.lambdaHandler = async (event, context, callback) => {
     // method to update the inventory table 
     let UpdateItemInventory = (store_id, sku, quantity, overstock) => {
         return new Promise((resolve, reject) => {
-            console.log("Update input items ( store_id: "+ store_id+", sku: "+sku+", quantity: "+quantity+", overstock: "+overstock)
+            // console.log("Update input items --> store_id: "+ store_id+", sku: "+sku+", quantity: "+quantity+", overstock: "+overstock)
             pool.query("UPDATE inventory SET quantity=?, overstock=? WHERE store_id=? AND sku=?", [quantity, overstock, store_id, sku], (error, rows) => {
                 if (error) { return reject(error); }
-                if ((rows) && (rows.length == 1)) {
+                // get infomation on query from rows and put into data
+                let data = JSON.parse(JSON.stringify(rows));
+                if ((rows) && (data.affectedRows == 1)) {
                     console.log("Updating check 1: "+ JSON.stringify(rows))
                     return resolve(true); // TRUE if does exist
                 }
@@ -171,7 +171,7 @@ exports.lambdaHandler = async (event, context, callback) => {
         let fillOverstock = 0;
         palletQuantity = parseInt(palletQuantity);
         
-
+        // Case: when there is no current inventory/stock at the store
         if (currentShelf == 0 && currentOverstock == 0) {
             if (shelfMaximum >= palletQuantity) {
                 fillShelf = palletQuantity;
@@ -180,14 +180,14 @@ exports.lambdaHandler = async (event, context, callback) => {
                 fillShelf = shelfMaximum;
                 fillOverstock = palletQuantity - shelfMaximum;
             }
-            console.log("Calculate values check 1 for shelves: " + fillShelf + " and overstock " + fillOverstock);
+            console.log("Calculate values check 1--> shelves: " + fillShelf + " and overstock " + fillOverstock);
             return [fillShelf, fillOverstock];
         }
 
         // available is the potential filling space on the shelf
         let available = shelfMaximum - currentShelf;
         
-        console.log("CALCULATE: variables values -> available: "+available+", currentShelf: "+currentShelf+", shelfMax: "+shelfMaximum+"palletQ: "+palletQuantity)
+        console.log("CALCULATE: var values -> available: "+available+", currentShelf: "+currentShelf+", shelfMax: "+shelfMaximum+"palletQ: "+palletQuantity)
         // Case: all items from shipment fit on the shelf space 
         if (palletQuantity < available) {
             console.log("CALCULATE: palletQuantity < available")
@@ -236,18 +236,19 @@ exports.lambdaHandler = async (event, context, callback) => {
     
             console.log("E3");
             if (exists) {
-    
                 console.log("Enter Exists")
                 // get current tables stock values 
                 const currentValues = await GetCurrentInventory(store_id, sku); 
+                if (currentValues == -1) {
+                    response.error = "Count not get current stock for item "+sku+" in store "+store_id; 
+                    response.statusCode = 400; 
+                } 
                 
-                // console.log("Got current values: "+currentValues)
                 let currentQuantity = parseInt(currentValues[0]); 
                 let currentOverstock = parseInt(currentValues[1]); 
-                // console.log("Got current indiv values: quant "+ currentQuantity+" and over "+currentOverstock)
-                
+
                 // calculate new update values 
-                const fillValues = await CalculateItemInventoryValues(quantity, maxShelfQuantity, currentQuantity, currentOverstock); 
+                const fillValues = CalculateItemInventoryValues(quantity, maxShelfQuantity, currentQuantity, currentOverstock); 
                 let fillQuantity = fillValues[0]; 
                 let fillOverstock = fillValues[1]; 
                 console.log("Calculated new fill values for update: quant "+fillQuantity+" and over "+fillOverstock)
@@ -284,7 +285,6 @@ exports.lambdaHandler = async (event, context, callback) => {
                     response.error = "Couldn't insert in store " + store_id + " the item " + sku;
                 }
             }
-    
         }
         catch (error) {
             console.log("ERROR: " + error);
@@ -292,7 +292,7 @@ exports.lambdaHandler = async (event, context, callback) => {
             response.error = error;
         }
     }
-    console.log("RESPONSE FINAL : "+response)
+    console.log("RESPONSE FINAL : "+response + " status "+ JSON.stringify(response.statusCode))
     
 return response;
 };

@@ -1,7 +1,7 @@
 {
-  "name": "generate_inventory",
+  "name": "corp_generate_inventory",
   "version": "1.0.0",
-  "description": "assign item location",
+  "description": "Corporate generate inventory",
   "main": "app.js",
   "repository": "TBA",
   "author": "SAM CLI",

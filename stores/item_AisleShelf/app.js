@@ -58,17 +58,38 @@ exports.lambdaHandler = async (event, context, callback) => {
     console.log("info:" + JSON.stringify(info)); //  info.arg1 and info.arg2
 
     // get raw value or, if a string, then get from database if exists.
+    // let ComputeArgumentValue = (info) => {
+    //     if (info.id !== "" ) {
+    //         console.log(info.id)
+    //         return new Promise((resolve, reject) => {
+    //             pool.query("INSERT INTO stores (id , longitude, latitude) VALUES (?, ?, ?);"
+    //                         , [info.id , info.longitude, info.latitude], (error, rows) => {
+    //                 if (error) { return reject(error); }
+    //                 if (rows) {
+    //                     return resolve(1);
+    //                 } else {
+    //                     return reject("unable to create '" + info.id + "'");
+    //                 }
+    //             });
+    //         });
+    //     } else {
+    //         // this is just the constant
+    //         return new Promise((reject) => { return reject("Store id can not be empty"); });
+    //     }
+    // }
+    
     let ComputeArgumentValue = (info) => {
-        if (info.id !== "" ) {
-            console.log(info.id)
+        if (info.store_ID !== "" ) {
+            console.log(info.store_ID)
             return new Promise((resolve, reject) => {
-                pool.query("INSERT INTO stores (id , longitude, latitude) VALUES (?, ?, ?);"
-                            , [info.id , info.longitude, info.latitude], (error, rows) => {
+                pool.query("SELECT sku FROM items WHERE aisle = ? and shelf = ?;"
+                            , [info.aisle , info.shelf], (error, rows) => {
                     if (error) { return reject(error); }
                     if (rows) {
+                        console.log(rows)
                         return resolve(1);
                     } else {
-                        return reject("unable to create '" + info.id + "'");
+                        return reject("unable to list sku");
                     }
                 });
             });
@@ -78,30 +99,24 @@ exports.lambdaHandler = async (event, context, callback) => {
         }
     }
     
-    let ComputeArgumentValue = (info) => {
-        if (info.store_ID !== "" ) {
-            console.log(info.store_ID)
+    let ComputeArgumentValue2 = (arg1_value, info) => {
+        if (arg1_value.sku !== "" ) {
+            console.log(arg1_value.sku)
             return new Promise((resolve, reject) => {
-                pool.query("SELECT sku FROM items WHERE aisle = ?, shelf = ? "
-                            , [info.aisle , info.shelf], (error, rows) => {
+                pool.query("SELECT quantity FROM inventory WHERE store_ID = ? and sku = ?;"
+                            , [info.store_ID , arg1_value.sku], (error, rows) => {
                     if (error) { return reject(error); }
                     if (rows) {
-                        for (let row in rows){
-                            pool.query("SELECT quantity FROM inventory WHERE store_ID = ?, sku = ?"
-                            , [info.store_ID, row.sku], (error2, rows2))
-                        }
-                    if (error2) { return reject(error); }
-                    if(rows2){
+                        console.log(rows)
                         return resolve(1);
-                    }
                     } else {
-                        return reject("Error");
+                        return reject("unable to list quantities");
                     }
                 });
             });
         } else {
             // this is just the constant
-            return new Promise((reject) => { return reject("Store id can not be empty"); });
+            return new Promise((reject) => { return reject("SKU can not be empty"); });
         }
     }
     
@@ -112,6 +127,7 @@ exports.lambdaHandler = async (event, context, callback) => {
         // ----> These have to be done asynchronously in series, and you wait for earlier 
         // ----> request to complete before beginning the next one
         let arg1_value = await ComputeArgumentValue(info);
+        let arg2_value = await ComputeArgumentValue2(arg1_value, info)
         
         // If either is NaN then there is an error
         if (isNaN(arg1_value)) {
@@ -122,7 +138,18 @@ exports.lambdaHandler = async (event, context, callback) => {
             // otherwise SUCCESS!
             response.statusCode = 200;
            
-            response.result = "Items on shelf and aisle listed sucessfully";
+            response.result = "Listed SKU successfully";
+        }
+        
+        if (isNaN(arg2_value)) {
+            console.log("arg" + arg2_value.reject);
+            response.statusCode = 400;
+            response.error = JSON.stringify(arg2_value);
+        } else {
+            // otherwise SUCCESS!
+            response.statusCode = 200;
+           
+            response.result = "Listed quantities successfully";
         }
     } catch (error) {
         console.log("ERROR: " + error);
