@@ -1,7 +1,7 @@
 {
-  "name": "generate_inventory",
+  "name": "buy_item",
   "version": "1.0.0",
-  "description": "manager generate inventory for the store",
+  "description": "buy an item from a store",
   "main": "app.js",
   "repository": "TBA",
   "author": "SAM CLI",
