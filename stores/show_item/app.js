@@ -48,26 +48,26 @@ exports.lambdaHandler = async (event, context) => {
         return new Promise((resolve, reject) => {
             pool.query("SELECT name, descriptions, price FROM items where SKU = ?", [sku], (error, rows) => {
                 if (error) { return reject(error); }
-                if ((rows)) {
+                if ((rows) && (rows.length == 1)) {
                     console.log(JSON.stringify(rows));
-                    // response.result = rows;
-                    return resolve(rows.value);   // TRUE if does exist
+                    return resolve(rows[0]);   
                 } else { 
-                    return resolve(true);   // REJECT if couldn't update WAIT TO CHECK
+                    return resolve("Unable to find SKU " + sku); 
                 }
             });
         });
     }
     try {
         // const ret = await axios(url);
-        const items = await showItem(info.sku);
+        const item = await showItem(info.sku);
         
-        if ((items)) {
-            response.statusCode = 200;
-            response.result = items;
-        } else {
+        console.log(item);
+        if (typeof item === 'string' || item instanceof String) {
             response.statusCode = 400;
-            response.error = "No item matches given sku";
+            response.error = item;
+        } else {
+            response.statusCode = 200;
+            response.result = item;
         }
         
     } catch (err) {

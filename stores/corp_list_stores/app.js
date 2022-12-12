@@ -38,7 +38,7 @@ exports.lambdaHandler = async (event, context) => {
         headers: {
             "Access-Control-Allow-Headers": "Content-Type",
             "Access-Control-Allow-Origin": "*", // Allow from anywhere
-            "Access-Control-Allow-Methods": "GET"
+            "Access-Control-Allow-Methods": "POST"
         }
     }; // response
     
