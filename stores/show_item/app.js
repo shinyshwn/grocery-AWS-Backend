@@ -63,15 +63,15 @@ exports.lambdaHandler = async (event, context) => {
         
         console.log(item);
         if (typeof item === 'string' || item instanceof String) {
-            response.status = 400;
+            response.statusCode = 400;
             response.error = item;
         } else {
-            response.status = 200;
+            response.statusCode = 200;
             response.result = item;
         }
         
     } catch (err) {
-        response.status = 400;
+        response.statusCode = 400;
         console.log(err);
         return err;
     }
