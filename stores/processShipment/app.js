@@ -207,8 +207,12 @@ exports.lambdaHandler = async (event, context, callback) => {
 
     // math and temp storage variables 
     let maxShelfQuantity = 0;
+    let result = "Processed: ";
     
     for (var p = 0; p < info.shipments.length ; p++) {
+        if (response.statusCode === 400) {
+            break; 
+        }
         let pallet = info.shipments[p]; 
         let sku = pallet.sku; 
         let store_id = pallet.store_id; 
@@ -227,7 +231,7 @@ exports.lambdaHandler = async (event, context, callback) => {
                 console.log("Got Max shelf : " + maxShelfQuantity);
             }
             else {
-                response.statusCode = 401;
+                response.statusCode = 400;
                 response.error = "Couldn't retrieve item " + sku + " max shelf quantity";
             }
     
@@ -258,7 +262,10 @@ exports.lambdaHandler = async (event, context, callback) => {
                 const updated = await UpdateItemInventory(store_id, sku, fillQuantity, fillOverstock);
                 console.log("E5");
                 if (updated) {
-                    response.statusCode = 200;
+                    result = result + JSON.stringify(pallet); 
+                    if (p !== info.shipments.length -1) {
+                        result = result + ", ";
+                    }
                 }
                 else {
                     response.statusCode = 400;
@@ -278,13 +285,21 @@ exports.lambdaHandler = async (event, context, callback) => {
                 const inserted = await InsertItemInventory(store_id, sku, fillShelf, fillOverstock);
                 console.log("E7");
                 if (inserted) {
-                    response.statusCode = 200;
+                    result = result + JSON.stringify(pallet); 
+                    if (p !== info.shipments.length -1) {
+                        result = result + ", ";
+                    }
                 }
                 else {
                     response.statusCode = 400;
                     response.error = "Couldn't insert in store " + store_id + " the item " + sku;
                 }
             }
+            if (response.statusCode !== 400){
+                response.statusCode = 200; 
+                response.result = result; 
+            }
+            
         }
         catch (error) {
             console.log("ERROR: " + error);
@@ -292,7 +307,7 @@ exports.lambdaHandler = async (event, context, callback) => {
             response.error = error;
         }
     }
-    console.log("RESPONSE FINAL : "+response + " status "+ JSON.stringify(response.statusCode))
+    console.log("RESPONSE FINAL : "+response.result + " status "+ JSON.stringify(response.statusCode))
     
 return response;
 };

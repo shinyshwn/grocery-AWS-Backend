@@ -151,13 +151,13 @@ exports.lambdaHandler = async (event, context, callback) => {
 
     // math and temp storage variables 
     let maxShelfQuantity = 0;
-    response.result = "Success! The folowing shelves were filled: ";
+    let result = "The folowing shelves were filled: ";
+    
     let store_id = info.store_id; 
     console.log("FROM JSON got store_id: "+ store_id)
     
     try { 
         console.log("E2")
-        
         const exists = await CheckExistence(store_id);
         console.log("E3")
         
@@ -184,6 +184,7 @@ exports.lambdaHandler = async (event, context, callback) => {
                 if (maxShelfQuantity === -1) {
                     response.error = "Failed to get item "+sku+" maximum shelf quantity. "; 
                     response.statusCode = 400; 
+                    break; 
                 } 
                     
                 if (overstock !== 0  && quantity !== maxShelfQuantity) {
@@ -198,10 +199,11 @@ exports.lambdaHandler = async (event, context, callback) => {
                     if (!updated) {
                         response.error = "Failed to fill shelves for item "+sku;
                         response.statusCode = 400; 
+                        break; 
                     }
                     else {
                         response.statusCode = 200; 
-                        response.result = response.result + ",  sku: "+sku+" filled to "+quantity; 
+                        result = result + "    sku: "+sku+" filled to "+fillShelf; 
                     }
                 }
                 else {
@@ -214,10 +216,12 @@ exports.lambdaHandler = async (event, context, callback) => {
                 response.statusCode = 400; 
                 response.error = "There is nothing to fill at store "+store_id; 
             }
-            // response.statusCode = 200; 
+            else {
+                response.result = result;
+            }
         }
         else { 
-            response.error = "Store "+store_id+" has no inventory or may not exist.";
+            response.error = "Store "+store_id+" has no inventory.";
             response.statusCode = 400; 
         }
     } catch(error) {
