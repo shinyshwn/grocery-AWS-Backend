@@ -1,0 +1,295 @@
+commit f8c89beee3af5b68575f437fb626683afba127a1
+Author: Sam Bryan <sbryan@wpi.edu>
+Date:   Tue Dec 13 00:14:29 2022 +0000
+
+    Hopefully last change to show item
+
+commit 68ef74b88ac4bd70f7a4008c7405cfe58522d9a2
+Author: Sam Bryan <sbryan@wpi.edu>
+Date:   Tue Dec 13 00:02:43 2022 +0000
+
+    modified show item
+
+commit 5f86cdad9b5e60266787992805488c1c58812f61
+Author: Sam Bryan <sbryan@wpi.edu>
+Date:   Mon Dec 12 23:30:49 2022 +0000
+
+    Show item
+
+commit b5800ecee67319cafcd9ba67a96332279a6c39c1
+Merge: 0230782 26f09c5
+Author: Sam Bryan <sbryan@wpi.edu>
+Date:   Mon Dec 12 23:26:26 2022 +0000
+
+    merge
+
+commit 02307829c7d91da98ab4b75b6667b57196f52f94
+Author: EC2 Default User <ec2-user@ip-172-31-63-87.ec2.internal>
+Date:   Mon Dec 12 23:23:07 2022 +0000
+
+    Show item done
+
+commit 26f09c55d3f0e8f36ebed079bcf89feaebcf469c
+Author: Shenghao Guo <sguo5@wpi.edu>
+Date:   Mon Dec 12 22:39:16 2022 +0000
+
+    add buy item
+
+commit d85221ec885240e1590f52d6cf37aa9772cd9dc6
+Author: EC2 Default User <ec2-user@ip-172-31-63-87.ec2.internal>
+Date:   Mon Dec 12 19:53:36 2022 +0000
+
+    Added show item
+
+commit f53e8350a2d684058d9947b56efb34e3b38032dd
+Merge: 134e057 0034856
+Author: EC2 Default User <ec2-user@ip-172-31-63-87.ec2.internal>
+Date:   Sat Dec 10 20:28:25 2022 +0000
+
+    Merge branch 'master' of https://git-codecommit.us-east-1.amazonaws.com/v1/repos/CS509_GroupProject
+
+commit 0034856aa36b8dfe4e3c41e840f7dc4ff85222b0
+Author: Elise Deshusses <ejdeshusses@gmail.com>
+Date:   Fri Dec 9 20:37:02 2022 +0000
+
+    Actually adding the Fill Shelves response edits...
+
+commit e6b8f9a95d7a274d20666b9bd133cac6dcdb32c4
+Author: Elise Deshusses <ejdeshusses@gmail.com>
+Date:   Wed Dec 7 22:09:13 2022 +0000
+
+    Adding FillShelves lambda function
+
+commit fad791ad48f4d5b381eac7f9d54f6370567bb801
+Author: Elise Deshusses <ejdeshusses@gmail.com>
+Date:   Tue Dec 6 16:45:30 2022 +0000
+
+    Fixing processShipment status codes, and cleaning up jsons
+
+commit d530d44d703056c85e053e9fe2a9b6937d3d954e
+Author: Elise Deshusses <ejdeshusses@gmail.com>
+Date:   Sun Dec 4 22:30:51 2022 +0000
+
+    Adding Lambda for missing items list and template edits
+
+commit 203b403007c1355b7963e1a8b47243e272156531
+Author: Elise Deshusses <ejdeshusses@gmail.com>
+Date:   Tue Nov 29 08:07:44 2022 +0000
+
+    Updating response json for remove store
+
+commit f551151241c1c6f28e59f34d74fbfb66b0bd7f80
+Author: Elise Deshusses <ejdeshusses@gmail.com>
+Date:   Tue Nov 29 07:30:24 2022 +0000
+
+    Updating condition for overstock report to exclude zero overstock
+
+commit 459ce8bc4606e6f6cd7bd5953e2fe67f7d240ddf
+Author: Elise Deshusses <ejdeshusses@gmail.com>
+Date:   Tue Nov 29 07:13:26 2022 +0000
+
+    Updating response item list for by aisle/shelf
+
+commit f11b80a07afa6d16e9c4fe111ecbd1cf15d7bffc
+Author: Elise Deshusses <ejdeshusses@gmail.com>
+Date:   Tue Nov 29 06:59:18 2022 +0000
+
+    Updating removeStores lambda
+
+commit eba2bdf770a33d39c847baa797805bf99bc44400
+Author: Elise Deshusses <ejdeshusses@gmail.com>
+Date:   Tue Nov 29 06:38:19 2022 +0000
+
+    Minor updates and an error message
+
+commit 688c7a3b0554b2c5835e4006664a83c981fa0591
+Author: Elise Deshusses <ejdeshusses@gmail.com>
+Date:   Tue Nov 29 05:58:40 2022 +0000
+
+    Adding aisle shelf item lambda and files
+
+commit 77facbb2e4dc7a415df9668f12106aefdd0e680a
+Merge: b10d848 dfe2088
+Author: Shenghao Guo <sguo5@wpi.edu>
+Date:   Tue Nov 29 04:22:01 2022 +0000
+
+    Merge branch 'master' of https://git-codecommit.us-east-1.amazonaws.com/v1/repos/CS509_GroupProject
+
+commit b10d8482feefce3fa1bb2cdc19cd85b53004390f
+Author: Shenghao Guo <sguo5@wpi.edu>
+Date:   Tue Nov 29 04:21:48 2022 +0000
+
+    corp generate inventory
+
+commit dfe20888b7856072059252e5ba572cd9f13cb5c1
+Author: Elise Deshusses <ejdeshusses@gmail.com>
+Date:   Tue Nov 29 03:46:05 2022 +0000
+
+    Adding remove store lambda, json, and edits to template
+
+commit f05e87382320a0b53e6306bf5fee96ea6581259e
+Author: Mary Barsoum <mbarsoum@wpi.edu>
+Date:   Tue Nov 29 03:09:02 2022 +0000
+
+    adding package
+
+commit 446830762d10983c97686b652ab5fbcf3cebb4c4
+Merge: 1aeed39 b1c5d9b
+Author: Shenghao Guo <sguo5@wpi.edu>
+Date:   Tue Nov 29 02:03:22 2022 +0000
+
+    Merge branch 'master' of https://git-codecommit.us-east-1.amazonaws.com/v1/repos/CS509_GroupProject
+
+commit 1aeed392c1df58b404e5e35badea9cce90cade2b
+Author: Shenghao Guo <sguo5@wpi.edu>
+Date:   Tue Nov 29 02:03:07 2022 +0000
+
+    update generate inventory report
+
+commit b1c5d9b3936f548648042ee4b4738780e85b88dc
+Author: Mary Barsoum <mbarsoum@wpi.edu>
+Date:   Tue Nov 29 00:40:28 2022 +0000
+
+    generate overstock report completed
+
+commit 134e0578c2af4643a1cd9424f82f979432abdec2
+Merge: b3b819a 120158b
+Author: EC2 Default User <ec2-user@ip-172-31-63-87.ec2.internal>
+Date:   Mon Nov 28 20:35:28 2022 +0000
+
+    Merge branch 'master' of https://git-codecommit.us-east-1.amazonaws.com/v1/repos/CS509_GroupProject
+    Small change
+
+commit b3b819a0670e360eeb18ca86550d6a72b45af812
+Author: EC2 Default User <ec2-user@ip-172-31-63-87.ec2.internal>
+Date:   Mon Nov 28 20:34:05 2022 +0000
+
+    Small cleanup
+
+commit ad2328c6449635dab6c0f6d04c26931ba5a4ef82
+Author: EC2 Default User <ec2-user@ip-172-31-63-87.ec2.internal>
+Date:   Mon Nov 28 20:08:59 2022 +0000
+
+    Small change
+
+commit 120158b3f1ee578406848f8eb80bda0c09c93b82
+Merge: f461808 c8b0b84
+Author: Shenghao Guo <sguo5@wpi.edu>
+Date:   Mon Nov 28 20:04:42 2022 +0000
+
+    add list stores
+
+commit f461808d1a38ccc954f56c1103800703d0ae7ebf
+Author: Shenghao Guo <sguo5@wpi.edu>
+Date:   Mon Nov 28 20:00:08 2022 +0000
+
+    update list stores
+
+commit c8b0b84cceb0d644cf6f1d86b8cfd1addccf1364
+Author: EC2 Default User <ec2-user@ip-172-31-63-87.ec2.internal>
+Date:   Mon Nov 28 19:48:23 2022 +0000
+
+    Corporate List Stores
+
+commit 4bbc92d034d42d881822ea690d25623e1340d848
+Merge: 75e209b ff3449e
+Author: Shenghao Guo <sguo5@wpi.edu>
+Date:   Wed Nov 23 00:28:56 2022 +0000
+
+    merge
+
+commit 75e209b97711f5cc2d768d5d1f80a58d9a2b4e03
+Author: Shenghao Guo <sguo5@wpi.edu>
+Date:   Wed Nov 23 00:22:26 2022 +0000
+
+    changed list stores. Mostly commit so I can pull
+
+commit ff3449e1faf157ecdbf7d0152f04ffe389075e18
+Author: Elise Deshusses <ejdeshusses@gmail.com>
+Date:   Tue Nov 22 23:59:14 2022 +0000
+
+    Updating template file to call the processShipment lambda with full functionality
+
+commit ee29bc2aae2751581e6646371a517d83ba519895
+Author: Elise Deshusses <ejdeshusses@gmail.com>
+Date:   Tue Nov 22 23:54:47 2022 +0000
+
+    Adding full process shipment with complete functionality and shipment json
+
+commit bc62654e7c30a52b9db6e5801a41adecb596fc65
+Author: EC2 Default User <ec2-user@ip-172-31-63-87.ec2.internal>
+Date:   Tue Nov 22 23:39:28 2022 +0000
+
+    Find item in store yaml
+
+commit f708785ccd8c8b1b8d783686c1e413752b47238e
+Author: EC2 Default User <ec2-user@ip-172-31-63-87.ec2.internal>
+Date:   Tue Nov 22 23:37:49 2022 +0000
+
+    Find item in store added
+
+commit 156e130051b4331edee9bb63e1251bbeacd1c800
+Author: Mary Barsoum <mbarsoum@wpi.edu>
+Date:   Fri Nov 18 03:53:34 2022 +0000
+
+    started list item shelf. Getting errors. Here is what I have so far
+
+commit 163e32ac278dc1c31e609bf3125cc3d752faef0e
+Author: Shenghao Guo <sguo5@wpi.edu>
+Date:   Fri Nov 11 19:37:19 2022 +0000
+
+    update generate inventory function to report error when store_id is null
+
+commit ae9ad85bf6d4592eacb4c3fc4001e40ea596bde3
+Author: Shenghao Guo <sguo5@wpi.edu>
+Date:   Fri Nov 11 15:50:37 2022 +0000
+
+    update generate inventory function to show total value
+
+commit 6f0d121b5025a8c5a8c6242fc8a8846e784674fa
+Author: Shenghao Guo <sguo5@wpi.edu>
+Date:   Fri Nov 11 00:21:34 2022 +0000
+
+    merge or whatever
+
+commit 464960fefbc051f5d05d14e053d15d10b864c471
+Author: shenghao guo <ec2-user@ip-172-31-34-192.ec2.internal>
+Date:   Fri Nov 11 00:14:58 2022 +0000
+
+    process shipment lambda
+
+commit 35e33fb4ccc0c318e29b1b24cd0ffcf1cf5ca8ef
+Author: EC2 Default User <ec2-user@ip-172-31-34-192.ec2.internal>
+Date:   Thu Nov 10 23:29:55 2022 +0000
+
+    process shipment
+
+commit 111f43bdc3269558244ef6d637fcecd982266216
+Author: Mary Barsoum <mbarsoum@wpi.edu>
+Date:   Thu Nov 10 20:50:09 2022 +0000
+
+    created generate inventory Lambda
+
+commit 32bb79812fc6180098068d7ebc0576b14cdb8b92
+Author: EC2 Default User <ec2-user@ip-172-31-34-192.ec2.internal>
+Date:   Wed Nov 9 16:16:59 2022 +0000
+
+    add create store
+
+commit d2562e3816b1b417f8af29cef4803a8d17d2420b
+Author: Shenghao Guo <sguo5@wpi.edu>
+Date:   Fri Nov 4 22:25:20 2022 +0000
+
+    create item and assign location
+
+commit 250b4564bb60e36d741e7f8ca3d883c9446d0e34
+Author: Shenghao Guo <sguo5@wpi.edu>
+Date:   Fri Nov 4 19:55:01 2022 +0000
+
+    create item function
+
+commit a60c9a46f204258416b4c52765631d6eb7d64bdf
+Author: EC2 Default User <ec2-user@ip-172-31-0-167.ec2.internal>
+Date:   Mon Oct 10 19:27:32 2022 +0000
+
+    New Change
